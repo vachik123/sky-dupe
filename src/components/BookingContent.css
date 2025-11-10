@@ -1,0 +1,45 @@
+/* Grid-based layout for a compact, editable form */
+.booking-content-grid {
+    display: grid;
+    /* Two sets of label/input columns for a 2x2 layout */
+    grid-template-columns: auto 1fr auto 1fr;
+    gap: 16px 20px; /* Row and column gap */
+    align-items: center;
+}
+
+.grid-label {
+    /* grid-column is no longer needed, auto-placement will handle it */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9em;
+    font-weight: 500;
+    color: #666;
+}
+
+.grid-label .label-icon {
+    font-size: 1.2em;
+    color: #888;
+}
+
+.grid-input {
+    /* grid-column is no longer needed */
+}
+
+.purpose-input-field {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.4);
+    font-size: 0.9em;
+    font-weight: 500;
+    color: #333;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+.purpose-input-field:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.5);
+}
