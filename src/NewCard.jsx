@@ -32,6 +32,7 @@ const NewCard = ({ isVisible, onClose, promptText, title, contentType, component
   const [isLoading, setIsLoading] = useState(true);
   const [showContent, setShowContent] = useState(false);
   const [isDone, setIsDone] = useState(false);
+  const [showCompletionMessage, setShowCompletionMessage] = useState(false);
 
   const ContentComponent = componentsMap[contentType];
 
@@ -58,6 +59,17 @@ const NewCard = ({ isVisible, onClose, promptText, title, contentType, component
     }
   }, [isVisible, contentType]);
 
+  useEffect(() => {
+    if (isDone) {
+      const timer = setTimeout(() => {
+        setShowCompletionMessage(true);
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else {
+      setShowCompletionMessage(false);
+    }
+  }, [isDone]);
+
   const cardClasses = `new-card ${!isLoading && showContent ? 'content' : ''} ${isLoading ? 'loading' : ''} ${isDone ? 'done' : ''}`;
 
   return (
@@ -68,12 +80,17 @@ const NewCard = ({ isVisible, onClose, promptText, title, contentType, component
             {isLoading ? null : (
                 <div className="folder-wrapper">
                     <div className="folder-tab">
-                        <span>{title}</span>
+                        <span>{title }</span>
                         {isDone && <FiCheck className="checkmark-icon" />}
                     </div>
                     <div className="folder-content">
                         <NewCardBody content={ContentComponent} />
                         <NewCardFooter onDone={handleDone} />
+                    </div>
+                    <div className={`completion-message-wrapper ${showCompletionMessage ? 'visible' : ''}`}>
+                        <span className="new-card-header new-card-header-prompt indented">
+                            {"I've completed the task."}
+                        </span>
                     </div>
                 </div>
             )}

@@ -44,15 +44,15 @@ function App() {
             <div className="glass-window">
                 <div className="main-content">
                 <div className="messages-window">
-                    <img src="https://picsum.photos/id/10/250/150" alt="Messages window" />
+                <img src="messages.png" alt="Messages window" />
                 </div>
                 <div className="ack-details">
                     <div className="messages-icon">
-                    <img src="https://picsum.photos/id/1/50/50" alt="Messages icon" />
+                    <img src="messages-icon.webp" alt="Messages icon" />
                     </div>
-                    <h2>A.C.K.</h2>
+                    <h2>Messaging Orkun</h2>
                     <p>Messages Window</p>
-                    <p>Skyshot</p>
+                    <p>Screenshot</p>
                 </div>
                 </div>
             </div>
@@ -72,7 +72,7 @@ function App() {
             <input
               type="text"
               className="sky-input"
-              placeholder="SKY"
+              placeholder="Type"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
             />

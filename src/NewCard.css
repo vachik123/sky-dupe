@@ -39,7 +39,7 @@
 }
 
 .new-card.done {
-    max-height: 125px; /* Adjusted height for collapsed state */
+    max-height: 160px; /* Adjusted height for collapsed state */
 }
 
 /* --- Header --- */
@@ -64,6 +64,11 @@
     display: flex;
     align-items: center;
     gap: 5px;
+}
+
+.indented {
+    padding: 0 24px; /* Adjust padding for smooth collapse */
+    padding-top: 20px
 }
 
 .header-button {
@@ -95,10 +100,6 @@
     opacity: 1;
 }
 
-.new-card.done .folder-wrapper {
-    grid-template-rows: auto 0fr;
-}
-
 .folder-tab {
     background-color: rgba(0, 0, 0, 0.05);
     padding: 8px 15px;
@@ -107,6 +108,7 @@
     color: #111;
     position: relative;
     width: 150px;
+    height: 20px;
     margin-left: 30px;
     text-align: center;
     border-bottom: none;
@@ -124,6 +126,10 @@
     border-radius: 16px; /* Fully rounded corners when done */
 }
 
+.new-card.done .folder-wrapper {
+    grid-template-rows: auto 0fr;
+}
+
 .checkmark-icon {
     color: #007aff;
 }
@@ -133,7 +139,7 @@
     padding: 0 20px; /* Adjust padding for smooth collapse */
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center; /* Center completion message */
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
     overflow: hidden;
@@ -188,4 +194,17 @@
 
 .footer-button.primary:hover {
     background: #006ae0;
+}
+
+/* --- Completion Message --- */
+.completion-message-wrapper {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.completion-message-wrapper.visible {
+    max-height: 60px; /* Adjust as needed */
+    opacity: 1;
 }
