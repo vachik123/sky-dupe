@@ -1,3 +1,4 @@
+
 .new-card-container {
     z-index: 2;
     opacity: 0;
@@ -22,11 +23,11 @@
     background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(20px);
     border-radius: 20px;
-    padding: 15px; /* Reduced padding to bring content closer to edge */
+    padding: 15px;
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
     width: 700px;
-    max-height: 90px; /* Initial loading height */
+    max-height: 90px; /* Initial height */
     transition: max-height 0.5s ease-in-out;
     overflow: hidden;
     display: flex;
@@ -35,7 +36,10 @@
 
 .new-card.content {
     max-height: 400px; /* Expanded height */
-    overflow: visible;
+}
+
+.new-card.done {
+    max-height: 125px; /* Adjusted height for collapsed state */
 }
 
 /* --- Header --- */
@@ -46,7 +50,7 @@
     margin-bottom: 15px;
     color: #333;
     font-size: 14px;
-    flex-shrink: 0; /* Prevent header from shrinking */
+    flex-shrink: 0;
 }
 
 .new-card-header-prompt {
@@ -56,74 +60,105 @@
     font-weight: 500;
 }
 
-.close-button {
+.new-card-header-controls {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.header-button {
     background: none;
     border: none;
     cursor: pointer;
     color: #888;
-    padding: 0;
-}
-
-/* --- Loading State --- */
-.loading-indicator {
+    padding: 5px;
+    border-radius: 50%;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    color: #666;
+    transition: background-color 0.2s ease;
 }
 
-.spinner {
-    border: 3px solid rgba(0, 0, 0, 0.1);
-    border-top-color: #555;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    animation: spin 1s linear infinite;
+.header-button:hover {
+    background-color: rgba(0,0,0,0.1);
 }
 
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-
-/* --- Folder Structure --- */
+/* --- Folder Structure: Grid for smooth animation --- */
 .folder-wrapper {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1; /* Allows the folder to fill the card */
-    border-radius: 12px; /* Rounded corners for the whole folder */
-    overflow: hidden; /* Clips content within the folder */
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    display: grid;
+    grid-template-rows: auto 1fr;
+    opacity: 0;
+    transition: grid-template-rows 0.5s ease-in-out, opacity 0.3s ease-in-out 0.1s;
+}
+
+.new-card.content .folder-wrapper {
+    opacity: 1;
+}
+
+.new-card.done .folder-wrapper {
+    grid-template-rows: auto 0fr;
 }
 
 .folder-tab {
-    background-color: rgba(0, 0, 0, 0.1);
-    padding: 10px 15px;
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 8px 15px;
     font-weight: 600;
-    font-size: 15px;
+    font-size: 14px;
     color: #111;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    position: relative;
+    width: 150px;
+    margin-left: 30px;
+    text-align: center;
+    border-bottom: none;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: border-radius 0.5s ease-in-out;
+}
+
+.new-card.done .folder-tab {
+    border-radius: 16px; /* Fully rounded corners when done */
+}
+
+.checkmark-icon {
+    color: #007aff;
 }
 
 .folder-content {
     background-color: rgba(0, 0, 0, 0.05);
-    padding: 20px;
-    flex-grow: 1;
+    padding: 0 20px; /* Adjust padding for smooth collapse */
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Pushes footer to the bottom */
+    justify-content: space-between;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    overflow: hidden;
 }
 
 /* --- Body and Footer inside the folder --- */
 .new-card-body {
-    margin-bottom: 25px;
+    margin: 20px 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.new-card.done .new-card-body {
+    opacity: 0;
 }
 
 .new-card-footer {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
+    padding-bottom: 20px;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.new-card.done .new-card-footer {
+    opacity: 0;
 }
 
 .footer-button {
@@ -135,6 +170,11 @@
     font-weight: 600;
     font-size: 15px;
     transition: background-color 0.2s ease;
+}
+
+.footer-button:focus, .footer-button:focus-visible {
+    outline: none;
+    box-shadow: none;
 }
 
 .footer-button:hover {
