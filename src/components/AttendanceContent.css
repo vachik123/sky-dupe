@@ -1,0 +1,35 @@
+.attendance-single-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    align-items: center;
+    padding: 10px;
+}
+
+.static-input-field,
+.date-input-field {
+    min-height: 38px;
+    padding: 0 12px;
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    color: #333;
+    font-weight: 500;
+    font-size: 0.9em;
+    box-sizing: border-box;
+}
+
+.date-input-field {
+    width: 100%;
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 550px) {
+    .attendance-single-row {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+}

@@ -5,11 +5,13 @@ import NewCard from './NewCard';
 import BookingContent from './components/BookingContent';
 import AttendanceContent from './components/AttendanceContent';
 import CalendarContent from './components/CalendarContent';
+import StaffBookingContent from './components/StaffBookingContent';
 
 const componentsMap = {
   booking: BookingContent,
   attendance: AttendanceContent,
   calendar: CalendarContent,
+  staffBooking: StaffBookingContent,
 };
 
 function App() {
@@ -90,7 +92,9 @@ function App() {
           <p onClick={(e) => handleSuggestionClick('attendance', e.target.innerText, 'Mark Attendance')}>
             Mark Alice as an excused absence for tomorrow... (see attached)
           </p>
-          <p onClick={(e) => handleSuggestionClick('calendar', e.target.innerText, 'My Calendar')}>What's on my calendar tonight?</p>
+          <p onClick={(e) => handleSuggestionClick('staffBooking', e.target.innerText, 'Book Staff')}>
+            Find and book a Professional Development session on December 12 for 3rd grade teachers on leveraging ChatGPT in education
+          </p>
         </div>
       </div>
     </div>
