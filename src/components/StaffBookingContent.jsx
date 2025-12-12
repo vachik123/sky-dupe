@@ -31,25 +31,24 @@ const vendors = [
 ];
 
 const FAKE_WORKFLOW_STEPS = [
-
   { 
     status: 'Checking budget availability...', 
-    delay: 2000,
+    delay: 2500,
     type: 'budget'
   },
   { 
     status: 'Generating Purchase Order...', 
-    delay: 2000,
+    delay: 2500,
     type: 'po'
   },
   { 
     status: 'Blocking calendars...', 
-    delay: 1500,
+    delay: 2500,
     type: 'calendar'
   },
 ];
 
-const StaffBookingContent = () => {
+const StaffBookingContent = ({ onWorkflowComplete, onContentReady }) => {
   const [showVendors, setShowVendors] = useState(false);
   const [selectedVendor, setSelectedVendor] = useState(null);
   const [isBooking, setIsBooking] = useState(false);
@@ -57,14 +56,20 @@ const StaffBookingContent = () => {
   const [isComplete, setIsComplete] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [stepStatuses, setStepStatuses] = useState({});
+  const [isStepLoading, setIsStepLoading] = useState(false);
+  const [showStepContent, setShowStepContent] = useState(false);
   const activeStepRef = React.useRef(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
         setShowVendors(true);
+        // Tell NewCard that content is ready to show footer
+        if (onContentReady) {
+          onContentReady();
+        }
     }, 3000);
     return () => clearTimeout(timer);
-  }, []);
+  }, [onContentReady]);
 
   useEffect(() => {
     // Auto-scroll to active step
@@ -72,6 +77,32 @@ const StaffBookingContent = () => {
       activeStepRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [currentStepIndex]);
+
+  // Load step with delay when currentStepIndex changes
+  useEffect(() => {
+    if (isBooking && currentStepIndex < FAKE_WORKFLOW_STEPS.length) {
+      setIsStepLoading(true);
+      setShowStepContent(false);
+      
+      const currentStep = FAKE_WORKFLOW_STEPS[currentStepIndex];
+      const loadTimer = setTimeout(() => {
+        setIsStepLoading(false);
+        // Small delay before showing content for smooth transition
+        setTimeout(() => {
+          setShowStepContent(true);
+        }, 100);
+      }, currentStep.delay);
+
+      return () => clearTimeout(loadTimer);
+    }
+  }, [currentStepIndex, isBooking]);
+
+  // Also call onContentReady when step content is ready
+  useEffect(() => {
+    if (showStepContent && onContentReady) {
+      onContentReady();
+    }
+  }, [showStepContent, onContentReady]);
 
   const handleAcceptStep = () => {
     setStepStatuses({
@@ -84,9 +115,14 @@ const StaffBookingContent = () => {
         setCurrentStepIndex(currentStepIndex + 1);
       }, 300);
     } else {
+      // This is the last step - trigger the workflow complete callback
       setTimeout(() => {
         setIsBooking(false);
         setIsDone(true);
+        // Call the parent's callback to mark the NewCard as done
+        if (onWorkflowComplete) {
+          onWorkflowComplete();
+        }
       }, 500);
     }
   };
@@ -96,6 +132,8 @@ const StaffBookingContent = () => {
     setIsBooking(true);
     setCurrentStepIndex(0);
     setStepStatuses({});
+    setIsStepLoading(true);
+    setShowStepContent(false);
   };
 
   const handleVideoClick = (e) => {
@@ -134,7 +172,7 @@ const StaffBookingContent = () => {
         return (
           <div className="step-details">
             <div className="po-preview">
-              <div className="po-header">Purchase Order #PO-2024-1847</div>
+              <div className="po-header">Purchase Order #PO-2025-1847</div>
               <div className="po-details">
                 <div className="po-line">Vendor: {selectedVendor?.name}</div>
                 <div className="po-line">Service: Professional Development Session</div>
@@ -163,10 +201,6 @@ const StaffBookingContent = () => {
         return null;
     }
   };
-
-  if (!showVendors) {
-      return null;
-  }
   
   if (isBooking) {
     return (
@@ -186,12 +220,12 @@ const StaffBookingContent = () => {
                 <div className="step-header">
                   <div className="step-icon">
                     {isComplete && <FiCheckCircle />}
-                    {isActive && <div className="active-dot"></div>}
-                    {isPending && <div className="pending-dot"></div>}
+                    {isActive && !isStepLoading && <div className="active-dot"></div>}
+                    {(isPending || (isActive && isStepLoading)) && <div className="pending-dot"></div>}
                   </div>
                   <div className="step-title">{step.status}</div>
                 </div>
-                {isActive && (
+                {isActive && showStepContent && !isStepLoading && (
                   <div className="step-content">
                     {renderStepContent(step.type)}
                     <div className="step-actions">
@@ -212,8 +246,12 @@ const StaffBookingContent = () => {
     );
   }
 
+  if (isDone) {
+    return null;
+  }  
+
   return (
-    <div className="staff-booking-container">
+    <div className={`staff-booking-container ${showVendors ? 'visible' : ''}`}>
       <div className="vendor-grid">
         {vendors.map(vendor => (
           <div key={vendor.id} className="vendor-card">

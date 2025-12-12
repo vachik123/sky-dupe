@@ -28,6 +28,19 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+#root {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 1200px; /* Shift everything to the right */
 }
 
 h1 {

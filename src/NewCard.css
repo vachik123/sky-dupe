@@ -35,7 +35,7 @@
 }
 
 .new-card.content {
-    max-height: 600px; /* Expanded height */
+    max-height: 550px; /* Expanded height */
 }
 
 .new-card.done {
@@ -59,6 +59,8 @@
     align-items: center;
     gap: 8px;
     font-weight: 500;
+    justify-content: flex-start;
+    text-align: left;
 }
 
 .new-card-header-controls {
@@ -206,4 +208,8 @@
 .completion-message-wrapper.visible {
     max-height: 60px; /* Adjust as needed */
     opacity: 1;
+}
+
+.completion-message-wrapper .new-card-header-prompt {
+    min-height: 24px; /* Adjust this value based on your font size */
 }

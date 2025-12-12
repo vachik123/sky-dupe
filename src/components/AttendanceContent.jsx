@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import './AttendanceContent.css';
 
@@ -51,30 +51,47 @@ const glassmorphismSelectStyles = {
   }),
 };
 
-const AttendanceContent = () => {
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-
+const AttendanceContent = ({ onContentReady }) => {
   const student = { label: 'Alice' }; // Static student from prompt
 
-  const [selectedDate, setSelectedDate] = useState(tomorrow.toISOString().split('T')[0]);
+  // Set date to November 10, 2025
+  const [selectedDate, setSelectedDate] = useState('2025-11-10');
   const [selectedStatus, setSelectedStatus] = useState(statusOptions.find(o => o.value === 'absent'));
 
+  useEffect(() => {
+    // Content is ready immediately for this component
+    if (onContentReady) {
+      onContentReady();
+    }
+  }, [onContentReady]);
+
   return (
-    <div className="attendance-single-row">
-      <div className="static-input-field">{student.label}</div>
-      <input
-        type="date"
-        className="date-input-field"
-        value={selectedDate}
-        onChange={(e) => setSelectedDate(e.target.value)}
-      />
-      <Select
-        styles={glassmorphismSelectStyles}
-        options={statusOptions}
-        value={selectedStatus}
-        onChange={setSelectedStatus}
-      />
+    <div className="attendance-content-grid">
+      <div className="grid-label">
+        <span>Student</span>
+      </div>
+      <div className="grid-input">
+        <div className="student-name">{student.label}</div>
+      </div>
+
+      <div className="grid-label">
+        <span>Date</span>
+      </div>
+      <div className="grid-input">
+        <input 
+          type="date"
+          className="date-input-field"
+          value={selectedDate}
+          onChange={(e) => setSelectedDate(e.target.value)}
+        />
+      </div>
+
+      <div className="grid-label">
+        <span>Status</span>
+      </div>
+      <div className="grid-input">
+        <Select styles={glassmorphismSelectStyles} options={statusOptions} value={selectedStatus} onChange={setSelectedStatus} />
+      </div>
     </div>
   );
 };

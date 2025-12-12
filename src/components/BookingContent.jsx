@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import './BookingContent.css';
 import { FiMapPin, FiClock, FiRepeat, FiEdit2 } from 'react-icons/fi';
@@ -70,12 +70,19 @@ const glassmorphismSelectStyles = {
   }),
 };
 
-const BookingContent = () => {
+const BookingContent = ({ onContentReady }) => {
   // --- Component State ---
   const [selectedRoom, setSelectedRoom] = useState(roomOptions.find(o => o.value === 'B6'));
   const [purpose, setPurpose] = useState('Math Club');
   const [selectedTime, setSelectedTime] = useState({ value: '3:30 PM', label: '3:30 PM' });
   const [selectedCadence, setSelectedCadence] = useState(cadenceOptions.find(o => o.value === 'weekly'));
+
+  useEffect(() => {
+    // Content is ready immediately for this component
+    if (onContentReady) {
+      onContentReady();
+    }
+  }, [onContentReady]);
 
   return (
     <div className="booking-content-grid">
